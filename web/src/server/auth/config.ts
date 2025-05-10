@@ -38,6 +38,9 @@ declare module "next-auth" {
  */
 export const authConfig = {
   providers: [GitHub],
+  pages: {
+    signIn: "/login",
+  },
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
