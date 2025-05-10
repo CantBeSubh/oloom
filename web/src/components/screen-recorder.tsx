@@ -10,11 +10,25 @@ export default function ScreenRecorder() {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: true,
-        audio: true,
+        video: {
+          frameRate: { ideal: 60 },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+          displaySurface: "monitor",
+        },
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100,
+        },
       });
 
-      const mediaRecorder = new MediaRecorder(stream);
+      const options = {
+        mimeType: "video/webm;codecs=vp9",
+        videoBitsPerSecond: 8000000, // 8 Mbps
+      };
+
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
 
       const chunks: Blob[] = [];
@@ -29,7 +43,7 @@ export default function ScreenRecorder() {
         stream.getTracks().forEach((track) => track.stop());
       };
 
-      mediaRecorder.start();
+      mediaRecorder.start(100);
       setIsRecording(true);
     } catch (err) {
       console.error("Error starting screen recording:", err);
@@ -43,34 +57,37 @@ export default function ScreenRecorder() {
     }
   };
 
-  const downloadRecording = () => {
+  const downloadRecording = async () => {
     if (recordedChunks.length === 0) return;
 
-    const blob = new Blob(recordedChunks, {
-      type: "video/webm",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style.display = "none";
-    a.href = url;
-    a.download = "screen-recording.webm";
-    a.click();
-    URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-    setRecordedChunks([]);
+    try {
+      const blob = new Blob(recordedChunks, { type: "video/webm" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style.display = "none";
+      a.href = url;
+      a.download = "screen-recording.webm";
+      a.click();
+      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      setRecordedChunks([]);
+    } catch (error) {
+      console.error("Error converting video:", error);
+      alert("Error converting video. Downloading in WebM format instead.");
+    }
   };
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <h2 className="mb-4 text-2xl font-bold">Screen Recorder</h2>
+      <h2 className="mb-4 text-2xl font-bold">High Quality Screen Recorder</h2>
       <div className="flex gap-4">
         {!isRecording ? (
           <button
             onClick={startRecording}
             className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
           >
-            Start Recording
+            Start Recording (60 FPS)
           </button>
         ) : (
           <button
@@ -85,7 +102,7 @@ export default function ScreenRecorder() {
             onClick={downloadRecording}
             className="rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
           >
-            Download Recording
+            Download MP4
           </button>
         )}
       </div>
