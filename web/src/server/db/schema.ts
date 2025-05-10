@@ -64,6 +64,7 @@ export const accounts = createTable(
     scope: d.text({ length: 255 }),
     id_token: d.text(),
     session_state: d.text({ length: 255 }),
+    refresh_token_expires_in: d.integer(),
   }),
   (t) => [
     primaryKey({
