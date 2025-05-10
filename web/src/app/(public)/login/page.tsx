@@ -1,5 +1,5 @@
-import SignIn from "@/components/auth/sign-in";
-import { Suspense } from "react";
+import SignIn from "@/components/auth/sign-in"
+import { Suspense } from "react"
 
 export default function LoginPage() {
   return (
@@ -13,5 +13,5 @@ export default function LoginPage() {
         </Suspense>
       </div>
     </main>
-  );
+  )
 }

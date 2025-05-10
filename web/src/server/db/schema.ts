@@ -1,8 +1,8 @@
-import { relations, sql } from "drizzle-orm";
-import { index, primaryKey, sqliteTableCreator } from "drizzle-orm/sqlite-core";
-import { type AdapterAccount } from "next-auth/adapters";
+import { relations, sql } from "drizzle-orm"
+import { index, primaryKey, sqliteTableCreator } from "drizzle-orm/sqlite-core"
+import { type AdapterAccount } from "next-auth/adapters"
 
-export const createTable = sqliteTableCreator((name) => `web_${name}`);
+export const createTable = sqliteTableCreator((name) => `web_${name}`)
 
 // --- NEXTAUTH ---
 export const users = createTable("user", (d) => ({
@@ -15,11 +15,11 @@ export const users = createTable("user", (d) => ({
   email: d.text({ length: 255 }).notNull(),
   emailVerified: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
   image: d.text({ length: 255 }),
-}));
+}))
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
-}));
+}))
 
 export const accounts = createTable(
   "account",
@@ -46,11 +46,11 @@ export const accounts = createTable(
     }),
     index("account_user_id_idx").on(t.userId),
   ],
-);
+)
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
-}));
+}))
 
 export const sessions = createTable(
   "session",
@@ -63,11 +63,11 @@ export const sessions = createTable(
     expires: d.integer({ mode: "timestamp" }).notNull(),
   }),
   (t) => [index("session_userId_idx").on(t.userId)],
-);
+)
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
-}));
+}))
 
 export const verificationTokens = createTable(
   "verification_token",
@@ -77,7 +77,7 @@ export const verificationTokens = createTable(
     expires: d.integer({ mode: "timestamp" }).notNull(),
   }),
   (t) => [primaryKey({ columns: [t.identifier, t.token] })],
-);
+)
 
 // --- MAIN TABLES ---
 export const videos = createTable("video", (d) => ({
@@ -94,9 +94,9 @@ export const videos = createTable("video", (d) => ({
   description: d.text(),
   createdAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
   updatedAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
-}));
+}))
 
 // --- RELATIONS ---
 export const videosRelations = relations(videos, ({ one }) => ({
   user: one(users, { fields: [videos.userId], references: [users.id] }),
-}));
+}))

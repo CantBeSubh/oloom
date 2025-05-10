@@ -1,5 +1,5 @@
-import { SignOut } from "@/components/auth/sign-out";
-import ScreenRecorder from "@/components/screen-recorder";
+import { SignOut } from "@/components/auth/sign-out"
+import ScreenRecorder from "@/components/screen-recorder"
 
 export default function HomePage() {
   return (
@@ -9,5 +9,5 @@ export default function HomePage() {
         <SignOut />
       </div>
     </main>
-  );
+  )
 }

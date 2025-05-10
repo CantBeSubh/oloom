@@ -1,14 +1,14 @@
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import GitHub from "next-auth/providers/github";
+import { DrizzleAdapter } from "@auth/drizzle-adapter"
+import { type DefaultSession, type NextAuthConfig } from "next-auth"
+import GitHub from "next-auth/providers/github"
 
-import { db } from "@/server/db";
+import { db } from "@/server/db"
 import {
   accounts,
   sessions,
   users,
   verificationTokens,
-} from "@/server/db/schema";
+} from "@/server/db/schema"
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -19,10 +19,10 @@ import {
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
-      id: string;
+      id: string
       // ...other properties
       // role: UserRole;
-    } & DefaultSession["user"];
+    } & DefaultSession["user"]
   }
 
   // interface User {
@@ -56,18 +56,18 @@ export const authConfig = {
       },
     }),
     authorized({ auth, request: { nextUrl } }) {
-      const pathname = nextUrl.pathname;
-      const isLoggedIn = !!auth?.user;
+      const pathname = nextUrl.pathname
+      const isLoggedIn = !!auth?.user
       const isPrivatePage = ["/dashboard"].some((page) =>
         pathname.startsWith(page),
-      );
+      )
       if (isPrivatePage) {
-        if (isLoggedIn) return true;
-        return false;
+        if (isLoggedIn) return true
+        return false
       } else if (isLoggedIn) {
-        return Response.redirect(new URL("/dashboard", nextUrl));
+        return Response.redirect(new URL("/dashboard", nextUrl))
       }
-      return true;
+      return true
     },
   },
-} satisfies NextAuthConfig;
+} satisfies NextAuthConfig

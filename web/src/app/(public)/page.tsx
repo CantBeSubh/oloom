@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "next/link"
 
 export default function HomePage() {
   return (
@@ -7,5 +7,5 @@ export default function HomePage() {
         <Link href="/dashboard">Go to Dashboard</Link>
       </div>
     </main>
-  );
+  )
 }
