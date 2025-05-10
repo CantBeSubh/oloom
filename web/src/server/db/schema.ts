@@ -92,6 +92,7 @@ export const videos = createTable("video", (d) => ({
     .references(() => users.id),
   title: d.text({ length: 255 }).notNull(),
   description: d.text(),
+  miniourl: d.text({ length: 255 }).notNull(),
   createdAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
   updatedAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
 }))

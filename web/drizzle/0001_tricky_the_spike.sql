@@ -1,0 +1,1 @@
+ALTER TABLE `web_video` ADD `miniourl` text(255) NOT NULL;
