@@ -2,35 +2,9 @@ import { relations, sql } from "drizzle-orm";
 import { index, primaryKey, sqliteTableCreator } from "drizzle-orm/sqlite-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
 export const createTable = sqliteTableCreator((name) => `web_${name}`);
 
-export const posts = createTable(
-  "post",
-  (d) => ({
-    id: d.integer({ mode: "number" }).primaryKey({ autoIncrement: true }),
-    name: d.text({ length: 256 }),
-    createdById: d
-      .text({ length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: d
-      .integer({ mode: "timestamp" })
-      .default(sql`(unixepoch())`)
-      .notNull(),
-    updatedAt: d.integer({ mode: "timestamp" }).$onUpdate(() => new Date()),
-  }),
-  (t) => [
-    index("created_by_idx").on(t.createdById),
-    index("name_idx").on(t.name),
-  ],
-);
-
+// --- NEXTAUTH ---
 export const users = createTable("user", (d) => ({
   id: d
     .text({ length: 255 })
@@ -104,3 +78,25 @@ export const verificationTokens = createTable(
   }),
   (t) => [primaryKey({ columns: [t.identifier, t.token] })],
 );
+
+// --- MAIN TABLES ---
+export const videos = createTable("video", (d) => ({
+  id: d
+    .text({ length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: d
+    .text({ length: 255 })
+    .notNull()
+    .references(() => users.id),
+  title: d.text({ length: 255 }).notNull(),
+  description: d.text(),
+  createdAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
+  updatedAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
+}));
+
+// --- RELATIONS ---
+export const videosRelations = relations(videos, ({ one }) => ({
+  user: one(users, { fields: [videos.userId], references: [users.id] }),
+}));
