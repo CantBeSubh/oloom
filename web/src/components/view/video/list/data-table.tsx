@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 "use client"
 
 import { Button } from "@/components/ui/button"
@@ -18,6 +20,7 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 interface DataTableProps<TData, TValue> {
@@ -43,6 +46,7 @@ export function DataTable<TData, TValue>({
     },
   })
 
+  const router = useRouter()
   return (
     <div>
       <div className="rounded-md border">
@@ -70,7 +74,12 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  className="cursor-pointer"
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() =>
+                    // @ts-expect-error - TypeScript doesn't know about the `data-state` attribute
+                    router.push(`/share?vid=${row.original.video.id}`)
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

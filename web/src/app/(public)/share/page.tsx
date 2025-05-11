@@ -1,5 +1,6 @@
 "use client"
 
+import { VideoPlayer } from "@/components/view/video/player"
 import { getSignedUrl } from "@/server/action/minio"
 import { useSearchParams } from "next/navigation"
 import React, { useEffect } from "react"
@@ -25,16 +26,16 @@ const SharePage = () => {
   }, [videoId])
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="h-[88vh] p-4">
       {videoUrl && (
-        <video
-          controls
-          className="max-h-[80vh] max-w-full rounded-lg shadow-lg"
+        <VideoPlayer
+          src={videoUrl}
           autoPlay={false}
+          controls={false}
+          className="h-full w-full"
         >
-          <source src={videoUrl} type="video/mp4" />
           Your browser does not support the video tag.
-        </video>
+        </VideoPlayer>
       )}
       {error && <p className="text-red-500">{error}</p>}
     </div>
