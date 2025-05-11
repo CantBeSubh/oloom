@@ -10,7 +10,13 @@ import {
 import { createShortUrl } from "@/server/action/shorturl"
 import type { shortUrls, videos as videoTable } from "@/server/db/schema"
 import type { ColumnDef } from "@tanstack/react-table"
-import { Clipboard, MoreHorizontal, ShareIcon } from "lucide-react"
+import {
+  Clipboard,
+  MoreHorizontal,
+  PencilIcon,
+  ShareIcon,
+  Trash2Icon,
+} from "lucide-react"
 
 export type VideoType = {
   video: typeof videoTable.$inferSelect
@@ -41,7 +47,7 @@ export const columns: ColumnDef<VideoType>[] = [
   },
   {
     id: "actions",
-    header: "Share",
+    header: "Actions",
     cell: ({ row }) => {
       const { video, short_url } = row.original
       return (
@@ -71,6 +77,16 @@ export const columns: ColumnDef<VideoType>[] = [
             >
               <ShareIcon className="mr-2 h-4 w-4" />
               Create Share Link
+            </DropdownMenuItem>
+
+            <DropdownMenuItem disabled>
+              <PencilIcon className="mr-2 h-4 w-4" />
+              Update
+            </DropdownMenuItem>
+
+            <DropdownMenuItem disabled className="text-red-500">
+              <Trash2Icon className="mr-2 h-4 w-4 text-red-500" />
+              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

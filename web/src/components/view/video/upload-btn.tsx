@@ -53,7 +53,7 @@ const UploadButton = () => {
     <div
       {...getRootProps()}
       className={cn(
-        "flex size-full cursor-pointer items-center justify-center rounded-lg border p-4 text-center transition-colors",
+        "flex size-full cursor-pointer flex-col items-center justify-center rounded-lg border p-4 text-center transition-colors",
         isDragActive && "border-dashed",
       )}
     >
@@ -86,7 +86,8 @@ const UploadButton = () => {
           Upload successful!
           <Button
             variant="link"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               router.push(uploadStatus.url!)
             }}
             className="ml-2 underline"
