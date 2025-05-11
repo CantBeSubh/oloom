@@ -30,11 +30,16 @@ export const uploadFile = async (file: File) => {
     })
 
     // Generate URL for the uploaded file
-    const fileUrl = `${process.env.NEXT_PUBLIC_MINIO_URL}/${bucketName}/${uniqueFilename}`
+
+    const presignedUrl = await minioClient.presignedGetObject(
+      bucketName,
+      uniqueFilename,
+      1000,
+    )
 
     return {
       success: true,
-      url: fileUrl,
+      url: presignedUrl,
       filename: uniqueFilename,
     }
   } catch (error) {
