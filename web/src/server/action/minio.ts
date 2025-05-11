@@ -47,7 +47,7 @@ export const uploadFile = async (file: File) => {
       userId: session.user.id,
       title: file.name,
       description: file.name,
-      miniourl: uniqueFilename,
+      filename: uniqueFilename,
     })
 
     return {
@@ -75,7 +75,7 @@ export const getSignedUrl = async (videoId: string, expiresIn = 1000) => {
     }
 
     const bucketName = "oloom"
-    const fileName = video.data.miniourl
+    const fileName = video.data.filename
 
     const presignedUrl = await minioClient.presignedGetObject(
       bucketName,

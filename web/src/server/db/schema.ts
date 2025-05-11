@@ -92,7 +92,24 @@ export const videos = createTable("video", (d) => ({
     .references(() => users.id),
   title: d.text({ length: 255 }).notNull(),
   description: d.text(),
-  miniourl: d.text({ length: 255 }).notNull(),
+  filename: d.text({ length: 255 }).notNull(),
+  createdAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
+  updatedAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
+}))
+
+export const shortUrls = createTable("short_url", (d) => ({
+  id: d
+    .text({ length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  videoId: d
+    .text({ length: 255 })
+    .notNull()
+    .unique()
+    .references(() => videos.id),
+
+  shortVideoId: d.text({ length: 255 }).notNull(),
   createdAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
   updatedAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
 }))
@@ -100,4 +117,8 @@ export const videos = createTable("video", (d) => ({
 // --- RELATIONS ---
 export const videosRelations = relations(videos, ({ one }) => ({
   user: one(users, { fields: [videos.userId], references: [users.id] }),
+}))
+
+export const shortUrlsRelations = relations(shortUrls, ({ one }) => ({
+  video: one(videos, { fields: [shortUrls.videoId], references: [videos.id] }),
 }))

@@ -2,7 +2,7 @@
 
 import { auth } from "@/server/auth"
 import { db } from "@/server/db"
-import { videos as videoTable } from "@/server/db/schema"
+import { shortUrls, videos as videoTable } from "@/server/db/schema"
 import { eq } from "drizzle-orm"
 type Video = typeof videoTable.$inferInsert
 
@@ -28,6 +28,8 @@ export const getVideos = async (limit = 10, offset = 0) => {
       .where(eq(videoTable.userId, session.user.id))
       .limit(limit)
       .offset(offset)
+      .leftJoin(shortUrls, () => eq(shortUrls.videoId, videoTable.id))
+
     return { success: true, data: videos }
   } catch (error) {
     console.error(error)
