@@ -1,5 +1,6 @@
 "use server"
 
+import { auth } from "@/server/auth"
 import { db } from "@/server/db"
 import { videos as videoTable } from "@/server/db/schema"
 import { eq } from "drizzle-orm"
@@ -16,10 +17,15 @@ export const createVideo = async (data: Video) => {
 }
 
 export const getVideos = async (limit = 10, offset = 0) => {
+  const session = await auth()
+  if (!session) {
+    return { success: false, error: "Not authenticated" }
+  }
   try {
     const videos = await db
       .select()
       .from(videoTable)
+      .where(eq(videoTable.userId, session.user.id))
       .limit(limit)
       .offset(offset)
     return { success: true, data: videos }

@@ -1,6 +1,8 @@
 "use server"
 
 import * as Minio from "minio"
+import { auth } from "../auth"
+import { createVideo } from "./video"
 // import { env } from '@/env'
 
 const minioClient = new Minio.Client({
@@ -12,6 +14,10 @@ const minioClient = new Minio.Client({
 })
 
 export const uploadFile = async (file: File) => {
+  const session = await auth()
+  if (!session) {
+    throw new Error("Not authenticated")
+  }
   try {
     // Convert File to Buffer
     const arrayBuffer = await file.arrayBuffer()
@@ -36,6 +42,13 @@ export const uploadFile = async (file: File) => {
       uniqueFilename,
       1000,
     )
+
+    await createVideo({
+      userId: session.user.id,
+      title: file.name,
+      description: file.name,
+      miniourl: uniqueFilename,
+    })
 
     return {
       success: true,
