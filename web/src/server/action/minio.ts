@@ -2,7 +2,7 @@
 
 import * as Minio from "minio"
 import { auth } from "../auth"
-import { createVideo } from "./video"
+import { createVideo, getVideo } from "./video"
 // import { env } from '@/env'
 
 const minioClient = new Minio.Client({
@@ -61,5 +61,33 @@ export const uploadFile = async (file: File) => {
       success: false,
       error: "Failed to upload file",
     }
+  }
+}
+
+export const getSignedUrl = async (videoId: string, expiresIn = 1000) => {
+  try {
+    const video = await getVideo(videoId)
+    if (video.error) {
+      throw new Error(video.error)
+    }
+    if (!video.data) {
+      throw new Error("Video not found")
+    }
+
+    const bucketName = "oloom"
+    const fileName = video.data.miniourl
+
+    const presignedUrl = await minioClient.presignedGetObject(
+      bucketName,
+      fileName,
+      expiresIn,
+    )
+
+    return presignedUrl
+  } catch (error) {
+    console.error(error)
+    throw new Error(
+      `Failed to get signed url: ${error instanceof Error ? error.message : "Unknown error"}`,
+    )
   }
 }
