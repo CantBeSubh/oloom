@@ -45,13 +45,23 @@ export function VideoPlayer({
   const playerRef = React.useRef<MediaPlayerInstance>(null)
 
   return (
-    <div className={cn("relative overflow-hidden rounded-lg", className)}>
+    <div
+      className={cn(
+        "relative aspect-video w-[75%] overflow-hidden rounded-lg",
+        className,
+      )}
+    >
       <MediaPlayer
         ref={playerRef}
-        className="aspect-video w-full"
+        className="size-full"
         title={title}
         poster={poster}
         {...props}
+        onClick={() =>
+          playerRef?.current?.paused
+            ? playerRef.current?.play()
+            : playerRef.current?.pause()
+        }
       >
         <MediaProvider {...providerProps}>
           <source src={src} type="video/mp4" />
