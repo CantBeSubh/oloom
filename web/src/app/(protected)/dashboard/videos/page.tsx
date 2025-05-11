@@ -19,7 +19,6 @@ const VideosPage = () => {
       const result = await getVideos()
       if (result.success && result.data) {
         setVideos(result.data)
-        console.log(result.data)
       } else {
         console.error(result.error)
       }
