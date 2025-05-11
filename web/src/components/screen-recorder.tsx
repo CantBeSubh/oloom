@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
+import { Button } from "./ui/button"
 
 export default function ScreenRecorder() {
   const [isRecording, setIsRecording] = useState(false)
@@ -83,27 +84,16 @@ export default function ScreenRecorder() {
       <h2 className="mb-4 text-2xl font-bold">High Quality Screen Recorder</h2>
       <div className="flex gap-4">
         {!isRecording ? (
-          <button
-            onClick={startRecording}
-            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          >
-            Start Recording (60 FPS)
-          </button>
+          <Button onClick={startRecording}>Start Recording</Button>
         ) : (
-          <button
-            onClick={stopRecording}
-            className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-          >
+          <Button variant="destructive" onClick={stopRecording}>
             Stop Recording
-          </button>
+          </Button>
         )}
         {recordedChunks.length > 0 && (
-          <button
-            onClick={downloadRecording}
-            className="rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
-          >
+          <Button variant="outline" onClick={downloadRecording}>
             Download MP4
-          </button>
+          </Button>
         )}
       </div>
     </div>

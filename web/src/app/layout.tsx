@@ -1,7 +1,8 @@
 import "@/styles/globals.css"
 
 import { ThemeProvider } from "@/components/theme-provider"
-import { ThemeToggle } from "@/components/theme-toggle"
+import Footer from "@/components/view/root/footer"
+import { Header } from "@/components/view/root/header"
 import { type Metadata } from "next"
 import { Geist } from "next/font/google"
 
@@ -28,12 +29,11 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          RootLayout
-          {/* HEADER */}
-          <div className="flex items-center justify-between p-4">
-            <ThemeToggle />
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <div className="flex-1">{children}</div>
+            <Footer />
           </div>
-          {children}
         </ThemeProvider>
       </body>
     </html>

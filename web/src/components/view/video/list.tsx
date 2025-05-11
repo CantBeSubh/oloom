@@ -1,9 +1,10 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import { createShortUrl } from "@/server/action/shorturl"
 import { getVideos } from "@/server/action/video"
 import type { shortUrls, videos as videoTable } from "@/server/db/schema"
-import Link from "next/link"
+import { Clipboard, ShareIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 
 type VideoType = {
@@ -11,7 +12,7 @@ type VideoType = {
   short_url: typeof shortUrls.$inferSelect | null
 }
 
-const VideosPage = () => {
+const VideoList = () => {
   const [videos, setVideos] = useState<VideoType[]>([])
 
   useEffect(() => {
@@ -38,40 +39,42 @@ const VideosPage = () => {
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-6">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">My Videos</h1>
-        <Link
-          href="/dashboard/videos/upload"
-          className="rounded-md bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
-        >
-          Upload Video
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="mx-auto h-full w-full p-6">
+      <div className="flex h-full w-full flex-wrap gap-4">
         {videos.map(({ video, short_url }) => (
-          <div key={video.id} className="rounded-lg border p-4 shadow-sm">
-            <h3 className="mb-2 text-lg font-semibold">{video.title}</h3>
-            <p className="mb-4 text-sm text-gray-600">{video.description}</p>
-            <div className="flex items-center justify-between">
+          <div
+            key={video.id}
+            className="flex h-40 w-64 flex-col items-start justify-between gap-2 rounded-lg border p-4"
+          >
+            <div className="w-full">
+              <h3 className="mb-2 truncate text-lg font-semibold">
+                {video.title}
+              </h3>
+              <p className="mb-4 truncate text-sm text-gray-600">
+                {video.description}
+              </p>
+            </div>
+
+            <div className="flex w-full items-center justify-between">
               <span className="text-sm text-gray-500">
                 {new Date(video.createdAt ?? 0).toLocaleDateString()}
               </span>
               {short_url ? (
-                <Link
-                  href={`/share/${short_url.shortVideoId}`}
-                  className="text-blue-500 transition hover:text-blue-600"
+                <Button
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      window.location.origin +
+                        `/share/${short_url.shortVideoId}`,
+                    )
+                  }
+                  // href={`/share/${short_url.shortVideoId}`}
                 >
-                  Share
-                </Link>
+                  <Clipboard className="h-4 w-4" />
+                </Button>
               ) : (
-                <button
-                  className="text-blue-500 transition hover:text-blue-600"
-                  onClick={() => handleShare(video.id)}
-                >
-                  Share
-                </button>
+                <Button onClick={() => handleShare(video.id)}>
+                  <ShareIcon className="h-4 w-4" />
+                </Button>
               )}
             </div>
           </div>
@@ -87,4 +90,4 @@ const VideosPage = () => {
   )
 }
 
-export default VideosPage
+export default VideoList

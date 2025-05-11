@@ -37,22 +37,20 @@ export const uploadFile = async (file: File) => {
 
     // Generate URL for the uploaded file
 
-    const presignedUrl = await minioClient.presignedGetObject(
-      bucketName,
-      uniqueFilename,
-      1000,
-    )
-
-    await createVideo({
+    const response = await createVideo({
       userId: session.user.id,
       title: file.name,
       description: file.name,
       filename: uniqueFilename,
     })
 
+    if (!response.success || !response.data) {
+      throw new Error("Failed to create video")
+    }
+
     return {
       success: true,
-      url: presignedUrl,
+      url: `/share?vid=${response.data.id}`,
       filename: uniqueFilename,
     }
   } catch (error) {

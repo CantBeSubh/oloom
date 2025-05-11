@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button"
 import { signOut } from "@/server/auth"
 
 export function SignOut() {
@@ -8,7 +9,9 @@ export function SignOut() {
         await signOut({ redirectTo: "/" })
       }}
     >
-      <button type="submit">Sign Out</button>
+      <Button variant="outline" type="submit">
+        Sign Out
+      </Button>
     </form>
   )
 }

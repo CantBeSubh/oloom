@@ -9,12 +9,7 @@ const ProtectedLayout = async ({
   if (!session) {
     redirect("/login")
   }
-  return (
-    <div>
-      ProtectedLayout
-      {children}
-    </div>
-  )
+  return <div>{children}</div>
 }
 
 export default ProtectedLayout
