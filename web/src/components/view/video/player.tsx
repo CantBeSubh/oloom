@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import {
   MediaPlayer,
   MediaProvider,
+  PlayButton,
   useMediaRemote,
   useMediaState,
   type MediaPlayerInstance,
@@ -47,7 +48,7 @@ export function VideoPlayer({
   return (
     <div
       className={cn(
-        "relative aspect-video w-[75%] overflow-hidden rounded-lg",
+        "relative aspect-video w-[65%] overflow-hidden rounded-lg",
         className,
       )}
     >
@@ -57,13 +58,8 @@ export function VideoPlayer({
         title={title}
         poster={poster}
         {...props}
-        onClick={() =>
-          playerRef?.current?.paused
-            ? playerRef.current?.play()
-            : playerRef.current?.pause()
-        }
       >
-        <MediaProvider {...providerProps}>
+        <MediaProvider {...providerProps} onClick={(e) => e.stopPropagation()}>
           <source src={src} type="video/mp4" />
         </MediaProvider>
         <VideoControls player={playerRef} />
@@ -169,6 +165,10 @@ function VideoControls({
       )}
       onMouseEnter={() => setIsControlsVisible(true)}
     >
+      <PlayButton className="group absolute top-1/2 left-1/2 inline-flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md ring-sky-400 outline-none ring-inset hover:bg-white/20 data-[focus]:ring-4">
+        <Play className="hidden h-12 w-12 rounded-lg bg-white p-1 group-data-[paused]:block dark:bg-black" />
+        <Pause className="h-12 w-12 rounded-lg bg-white p-1 group-data-[paused]:hidden dark:bg-black" />
+      </PlayButton>
       <div className="px-4 pb-1">
         <div className="relative h-1 rounded-full bg-gray-700">
           <div
