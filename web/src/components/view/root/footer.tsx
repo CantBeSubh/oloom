@@ -1,4 +1,5 @@
 import { Icons } from "@/components/icons"
+import { Globe } from "lucide-react"
 import Link from "next/link"
 
 const Footer = () => {
@@ -13,7 +14,7 @@ const Footer = () => {
           {/* Social Links */}
           <div className="flex items-center gap-4">
             <Link
-              href="https://github.com"
+              href="https://github.com/CantBeSubh/oloom"
               target="_blank"
               rel="noreferrer"
               className="text-muted-foreground hover:text-foreground"
@@ -22,7 +23,7 @@ const Footer = () => {
               <span className="sr-only">GitHub</span>
             </Link>
             <Link
-              href="https://twitter.com"
+              href="https://x.com/CantBeSubh"
               target="_blank"
               rel="noreferrer"
               className="text-muted-foreground hover:text-foreground"
@@ -31,13 +32,22 @@ const Footer = () => {
               <span className="sr-only">Twitter</span>
             </Link>
             <Link
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/subhranshu-pati"
               target="_blank"
               rel="noreferrer"
               className="text-muted-foreground hover:text-foreground"
             >
               <Icons.linkedin className="h-5 w-5" />
               <span className="sr-only">LinkedIn</span>
+            </Link>
+            <Link
+              href="https://subhranshu.com"
+              target="_blank"
+              rel="noreferrer"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <Globe className="h-5 w-5" />
+              <span className="sr-only">Portfolio</span>
             </Link>
           </div>
         </div>
