@@ -89,7 +89,7 @@ export const videos = createTable("video", (d) => ({
   userId: d
     .text({ length: 255 })
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   title: d.text({ length: 255 }).notNull(),
   description: d.text(),
   filename: d.text({ length: 255 }).notNull(),
@@ -107,7 +107,7 @@ export const shortUrls = createTable("short_url", (d) => ({
     .text({ length: 255 })
     .notNull()
     .unique()
-    .references(() => videos.id),
+    .references(() => videos.id, { onDelete: "cascade" }),
 
   shortVideoId: d.text({ length: 255 }).notNull(),
   createdAt: d.integer({ mode: "timestamp" }).default(sql`(unixepoch())`),
