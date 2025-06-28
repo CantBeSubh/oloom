@@ -11,7 +11,7 @@ export const createShortUrl = async (videoId: string) => {
       .insert(shortUrls)
       .values({
         videoId,
-        shortVideoId: convertUuidToBase36(videoId),
+        shortVideoId: convertUuidToBase36(videoId), //todo: ask user for this uuid
       })
 
       .returning()
