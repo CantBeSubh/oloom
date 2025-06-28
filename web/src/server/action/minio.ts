@@ -24,8 +24,7 @@ export const uploadFile = async (file: File) => {
     const buffer = Buffer.from(arrayBuffer)
 
     // Generate unique filename to avoid collisions
-    const timestamp = Date.now()
-    const uniqueFilename = `${timestamp}-${file.name}`
+    const uniqueFilename = `${crypto.randomUUID()}-${file.name}`
 
     // Define bucket name - make sure this bucket exists in your MinIO setup
     const bucketName = "oloom"
@@ -86,6 +85,19 @@ export const getSignedUrl = async (videoId: string, expiresIn = 1000) => {
     console.error(error)
     throw new Error(
       `Failed to get signed url: ${error instanceof Error ? error.message : "Unknown error"}`,
+    )
+  }
+}
+
+export const removeFile = async (filename: string) => {
+  try {
+    const bucketName = "oloom"
+    await minioClient.removeObject(bucketName, filename)
+    return true
+  } catch (error) {
+    console.error(error)
+    throw new Error(
+      `Failed to remove file: ${error instanceof Error ? error.message : "Unknown error"}`,
     )
   }
 }

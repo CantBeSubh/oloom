@@ -4,6 +4,7 @@ import { auth } from "@/server/auth"
 import { db } from "@/server/db"
 import { shortUrls, videos as videoTable } from "@/server/db/schema"
 import { eq } from "drizzle-orm"
+import { removeFile } from "./minio"
 type Video = typeof videoTable.$inferInsert
 
 export const createVideo = async (data: Video) => {
@@ -85,6 +86,8 @@ export const deleteVideo = async (id: string) => {
     if (!video) {
       return { success: false, error: "Video not found" }
     }
+
+    await removeFile(video.filename)
 
     return { success: true, data: video }
   } catch (error) {

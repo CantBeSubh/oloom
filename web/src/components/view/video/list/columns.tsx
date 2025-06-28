@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { createShortUrl } from "@/server/action/shorturl"
-import { updateVideo } from "@/server/action/video"
+import { deleteVideo, updateVideo } from "@/server/action/video"
 import type { shortUrls, videos as videoTable } from "@/server/db/schema"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
@@ -123,7 +123,16 @@ export const columns: ColumnDef<VideoType>[] = [
                 Update
               </DropdownMenuItem>
 
-              <DropdownMenuItem disabled className="text-red-500">
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.stopPropagation()
+                  deleteVideo(video.id).catch((err) => {
+                    console.error(err)
+                    alert("Error deleting video")
+                  })
+                }}
+                className="text-red-5s00"
+              >
                 <Trash2Icon className="mr-2 h-4 w-4 text-red-500" />
                 Delete
               </DropdownMenuItem>

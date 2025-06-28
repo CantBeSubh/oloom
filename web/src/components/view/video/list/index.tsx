@@ -33,10 +33,6 @@ const VideoList = () => {
     getData().catch(console.error)
   }, [])
 
-  if (videos.length === 0) {
-    return <p className="text-center text-gray-500">Loading</p>
-  }
-
   return (
     <div className="mx-auto w-full p-6">
       <DataTable columns={columns} data={videos} />
