@@ -79,38 +79,39 @@ export const columns: ColumnDef<VideoType>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuItem
-                onClick={(e) => {
-                  e.stopPropagation()
-                  navigator.clipboard
-                    .writeText(
-                      window.location.origin +
-                        `/share/${short_url?.shortVideoId}`,
-                    )
-                    .catch((err) => {
+              {!short_url ? (
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleShare(video.id).catch((err) => {
                       console.error(err)
-                      alert("Error copying share link")
+                      alert("Error creating short url")
                     })
-                }}
-                disabled={!short_url}
-              >
-                <Clipboard className="mr-2 h-4 w-4" />
-                Copy Share Link
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleShare(video.id).catch((err) => {
-                    console.error(err)
-                    alert("Error creating short url")
-                  })
-                }}
-                disabled={!!short_url}
-              >
-                <ShareIcon className="mr-2 h-4 w-4" />
-                Create Share Link
-              </DropdownMenuItem>
+                  }}
+                >
+                  <ShareIcon className="mr-2 h-4 w-4" />
+                  Create Share Link
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    navigator.clipboard
+                      .writeText(
+                        window.location.origin +
+                          `/share/${short_url?.shortVideoId}`,
+                      )
+                      .catch((err) => {
+                        console.error(err)
+                        alert("Error copying share link")
+                      })
+                  }}
+                  disabled={!short_url}
+                >
+                  <Clipboard className="mr-2 h-4 w-4" />
+                  Copy Share Link
+                </DropdownMenuItem>
+              )}
 
               <DropdownMenuItem
                 onClick={(e) => {
