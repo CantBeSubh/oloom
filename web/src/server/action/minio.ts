@@ -19,17 +19,14 @@ export const uploadFile = async (file: File) => {
     if (!session) {
       throw new Error("Not authenticated")
     }
-    // Convert File to Buffer
+
+    // TODO: generate subtitle (.srt) file
+    const userId = session.user.id
+    const uniqueFilename = `${userId}/${crypto.randomUUID()}/video.mp4`
+
+    const bucketName = "oloom"
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
-
-    // Generate unique filename to avoid collisions
-    const uniqueFilename = `${crypto.randomUUID()}-${file.name}`
-
-    // Define bucket name - make sure this bucket exists in your MinIO setup
-    const bucketName = "oloom"
-
-    // Upload file to MinIO
     await minioClient.putObject(bucketName, uniqueFilename, buffer, file.size, {
       "Content-Type": file.type,
     })
