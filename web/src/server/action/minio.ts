@@ -22,7 +22,7 @@ export const uploadFile = async (file: File) => {
 
     // TODO: generate subtitle (.srt) file
     const userId = session.user.id
-    const uniqueFilename = `${userId}/${crypto.randomUUID()}/video.mp4`
+    const uniqueFilename = `${userId}/${crypto.randomUUID()}/video.${file.type.split("/")[1]}`
 
     const bucketName = "oloom"
     const arrayBuffer = await file.arrayBuffer()
