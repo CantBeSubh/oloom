@@ -80,7 +80,7 @@ export default function ScreenRecorder() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="pointer-events-none flex flex-col items-center gap-4 opacity-10">
       <h2 className="mb-4 text-2xl font-bold">High Quality Screen Recorder</h2>
       <div className="flex gap-4">
         {!isRecording ? (
