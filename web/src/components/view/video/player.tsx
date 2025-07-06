@@ -59,7 +59,11 @@ export function VideoPlayer({
         poster={poster}
         {...props}
       >
-        <MediaProvider {...providerProps} onClick={(e) => e.stopPropagation()}>
+        <MediaProvider
+          {...providerProps}
+          onClick={(e) => e.stopPropagation()}
+          className="size-full [&_video]:absolute [&_video]:top-1/2 [&_video]:left-1/2 [&_video]:h-full [&_video]:-translate-x-1/2 [&_video]:-translate-y-1/2 [&_video]:object-cover"
+        >
           <source src={src} type="video/mp4" />
         </MediaProvider>
         <VideoControls player={playerRef} />
