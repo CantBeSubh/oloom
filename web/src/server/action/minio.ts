@@ -14,11 +14,11 @@ const minioClient = new Minio.Client({
 })
 
 export const uploadFile = async (file: File) => {
-  const session = await auth()
-  if (!session) {
-    throw new Error("Not authenticated")
-  }
   try {
+    const session = await auth()
+    if (!session) {
+      throw new Error("Not authenticated")
+    }
     // Convert File to Buffer
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
@@ -47,17 +47,10 @@ export const uploadFile = async (file: File) => {
       throw new Error("Failed to create video")
     }
 
-    return {
-      success: true,
-      url: `/share?vid=${response.data.id}`,
-      filename: uniqueFilename,
-    }
+    return `/share?vid=${response.data.id}`
   } catch (error) {
     console.error("Error uploading file:", error)
-    return {
-      success: false,
-      error: "Failed to upload file",
-    }
+    throw error
   }
 }
 
