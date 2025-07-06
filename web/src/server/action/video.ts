@@ -66,13 +66,13 @@ export const updateVideo = async (id: string, data: Partial<Video>) => {
       .returning()
 
     if (!video) {
-      return { success: false, error: "Video not found" }
+      throw new Error("Video not found")
     }
 
-    return { success: true, data: video }
+    return video
   } catch (error) {
     console.error(error)
-    return { success: false, error: "Failed to update video" }
+    throw error
   }
 }
 
@@ -84,14 +84,14 @@ export const deleteVideo = async (id: string) => {
       .returning()
 
     if (!video) {
-      return { success: false, error: "Video not found" }
+      throw new Error("Video not found")
     }
 
     await removeFile(video.filename)
 
-    return { success: true, data: video }
+    return video
   } catch (error) {
     console.error(error)
-    return { success: false, error: "Failed to delete video" }
+    throw error
   }
 }

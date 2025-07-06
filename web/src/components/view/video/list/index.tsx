@@ -54,7 +54,7 @@ const VideoList = () => {
     queryFn: () => getVideos(),
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    refetchInterval: 3000, // Poll every 30 seconds
+    refetchInterval: 30000, // Poll every 30 seconds
   })
 
   const { mutate: createShortUrlMutation } = useMutation({
@@ -72,8 +72,26 @@ const VideoList = () => {
     mutationKey: ["createShortUrl"],
   })
 
+  const { mutate: deleteVideoMutation } = useMutation({
+    mutationFn: (videoId: string) => deleteVideo(videoId),
+    onSuccess: () => {
+      queryClient
+        .invalidateQueries({ queryKey: ["videos"] })
+        .catch((err) => console.error(err))
+    },
+    onError: (err) => {
+      console.error(err)
+      alert("Error deleting video")
+    },
+    mutationKey: ["deleteVideo"],
+  })
+
   const handleShare = (videoId: string) => {
     createShortUrlMutation(videoId)
+  }
+
+  const handleDelete = (videoId: string) => {
+    deleteVideoMutation(videoId)
   }
 
   const columns: ColumnDef<VideoType>[] = [
@@ -157,10 +175,7 @@ const VideoList = () => {
                 <DropdownMenuItem
                   onClick={(e) => {
                     e.stopPropagation()
-                    deleteVideo(video.id).catch((err) => {
-                      console.error(err)
-                      alert("Error deleting video")
-                    })
+                    handleDelete(video.id)
                   }}
                   className="text-red-5s00"
                 >
@@ -199,6 +214,9 @@ const VideoList = () => {
                   onClick={() =>
                     updateVideo(video.id, { title, description })
                       .then(() => setIsUpdateDialogOpen(false))
+                      .then(() =>
+                        queryClient.invalidateQueries({ queryKey: ["videos"] }),
+                      )
                       .catch((err) => console.error(err))
                   }
                 >
