@@ -48,7 +48,7 @@ export function VideoPlayer({
   return (
     <div
       className={cn(
-        "relative aspect-video w-[65%] overflow-hidden rounded-lg",
+        "relative aspect-video w-[75%] overflow-hidden rounded-lg",
         className,
       )}
     >
