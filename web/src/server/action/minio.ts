@@ -38,7 +38,7 @@ export const uploadFile = async (file: File) => {
 
     const response = await createVideo({
       userId: session.user.id,
-      title: file.name,
+      title: file.name.split(".").slice(0, -1).join("."),
       description: file.name,
       filename: uniqueFilename,
     })
