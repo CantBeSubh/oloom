@@ -18,7 +18,7 @@ const spinnerVariants = cva("flex-col items-center justify-center", {
 const loaderVariants = cva("text-primary animate-spin", {
   variants: {
     size: {
-      xs: "size-5",
+      xs: "size-4",
       small: "size-6",
       medium: "size-8",
       large: "size-12",
