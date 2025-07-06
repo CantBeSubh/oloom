@@ -61,18 +61,15 @@ export const uploadFile = async (file: File) => {
   }
 }
 
-export const getSignedUrl = async (videoId: string, expiresIn = 1000) => {
+export const getSignedUrl = async (videoId: string, expiresIn = 3600) => {
   try {
     const video = await getVideo(videoId)
-    if (video.error) {
-      throw new Error(video.error)
-    }
-    if (!video.data) {
+    if (!video) {
       throw new Error("Video not found")
     }
 
     const bucketName = "oloom"
-    const fileName = video.data.filename
+    const fileName = video.filename
 
     const presignedUrl = await minioClient.presignedGetObject(
       bucketName,

@@ -18,11 +18,11 @@ export const createVideo = async (data: Video) => {
 }
 
 export const getVideos = async (limit = 10, offset = 0) => {
-  const session = await auth()
-  if (!session) {
-    return { success: false, error: "Not authenticated" }
-  }
   try {
+    const session = await auth()
+    if (!session) {
+      throw new Error("Not authenticated")
+    }
     const videos = await db
       .select()
       .from(videoTable)
@@ -31,10 +31,10 @@ export const getVideos = async (limit = 10, offset = 0) => {
       .offset(offset)
       .leftJoin(shortUrls, () => eq(shortUrls.videoId, videoTable.id))
 
-    return { success: true, data: videos }
+    return videos
   } catch (error) {
     console.error(error)
-    return { success: false, error: "Failed to fetch videos" }
+    throw error
   }
 }
 
@@ -47,13 +47,13 @@ export const getVideo = async (id: string) => {
       .get()
 
     if (!video) {
-      return { success: false, error: "Video not found" }
+      throw new Error("Video not found")
     }
 
-    return { success: true, data: video }
+    return video
   } catch (error) {
     console.error(error)
-    return { success: false, error: "Failed to fetch video" }
+    throw error
   }
 }
 

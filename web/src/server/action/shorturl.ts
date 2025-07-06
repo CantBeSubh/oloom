@@ -31,13 +31,13 @@ export const getShortUrl = async (shortVideoId: string) => {
       .get()
 
     if (!shortUrl) {
-      return { success: false, error: "Short url not found" }
+      throw new Error("Short url not found")
     }
 
-    return { success: true, data: shortUrl }
+    return shortUrl
   } catch (error) {
     console.error(error)
-    return { success: false, error: "Failed to fetch short url" }
+    throw error
   }
 }
 
