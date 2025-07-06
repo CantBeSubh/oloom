@@ -1,6 +1,8 @@
 import { FlatCompat } from "@eslint/eslintrc"
 import tseslint from "typescript-eslint"
 // @ts-ignore -- no types for this plugin
+import pluginQuery from '@tanstack/eslint-plugin-query'
+// @ts-ignore -- no types for this plugin
 import drizzle from "eslint-plugin-drizzle"
 
 const compat = new FlatCompat({
@@ -12,6 +14,7 @@ export default tseslint.config(
     ignores: [".next"],
   },
   ...compat.extends("next/core-web-vitals"),
+  ...pluginQuery.configs['flat/recommended'],
   {
     files: ["**/*.ts", "**/*.tsx"],
     plugins: {

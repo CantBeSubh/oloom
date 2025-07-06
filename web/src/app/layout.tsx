@@ -1,8 +1,8 @@
 import "@/styles/globals.css"
 
-import { ThemeProvider } from "@/components/theme-provider"
 import Footer from "@/components/view/root/footer"
 import { Header } from "@/components/view/root/header"
+import Providers from "@/providers"
 import { type Metadata } from "next"
 import { Geist } from "next/font/google"
 
@@ -23,18 +23,13 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <Providers>
           <div className="flex min-h-screen flex-col">
             <Header />
             <div className="flex-1">{children}</div>
             <Footer />
           </div>
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   )
