@@ -3,6 +3,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import {
   Table,
   TableBody,
@@ -26,11 +27,15 @@ import { useState } from "react"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  isLoading: boolean
+  isFetching: boolean
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  isLoading,
+  isFetching,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
 
@@ -49,6 +54,10 @@ export function DataTable<TData, TValue>({
   const router = useRouter()
   return (
     <div>
+      <div className="pb -4 flex items-center justify-start gap-2 pb-3">
+        <h2 className="text-2xl font-bold">VIDEOS</h2>
+        <Spinner size="xs" show={isFetching || isLoading} />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -97,7 +106,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No videos uploaded yet.
+                  {isLoading ? "Loading..." : "No videos uploaded yet."}
                 </TableCell>
               </TableRow>
             )}

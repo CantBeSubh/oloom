@@ -105,7 +105,7 @@ const UploadButton = () => {
               e.stopPropagation()
               router.push(url)
             }}
-            className="ml-2 underline"
+            className="ml-2 underline dark:text-black"
           >
             View video
           </Button>

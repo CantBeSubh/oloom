@@ -44,11 +44,17 @@ type VideoType = {
 const VideoList = () => {
   const queryClient = useQueryClient()
 
-  const { data: videos, error } = useQuery({
+  const {
+    data: videos,
+    error,
+    isFetching,
+    isLoading,
+  } = useQuery({
     queryKey: ["videos"],
     queryFn: () => getVideos(),
     refetchOnMount: true,
     refetchOnWindowFocus: true,
+    refetchInterval: 3000, // Poll every 30 seconds
   })
 
   const { mutate: createShortUrlMutation } = useMutation({
@@ -219,7 +225,12 @@ const VideoList = () => {
 
   return (
     <div className="mx-auto w-full p-6">
-      <DataTable columns={columns} data={videos ?? []} />
+      <DataTable
+        columns={columns}
+        data={videos ?? []}
+        isLoading={isLoading}
+        isFetching={isFetching}
+      />
     </div>
   )
 }
