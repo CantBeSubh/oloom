@@ -22,6 +22,8 @@ import { deleteVideo, getVideos, updateVideo } from "@/server/action/video"
 import type { shortUrls, videos as videoTable } from "@/server/db/schema"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { ColumnDef } from "@tanstack/react-table"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
 import {
   Clipboard,
   MoreHorizontal,
@@ -31,6 +33,8 @@ import {
 } from "lucide-react"
 import { useState } from "react"
 import { DataTable } from "./data-table"
+
+dayjs.extend(relativeTime)
 
 type VideoType = {
   video: typeof videoTable.$inferSelect
@@ -75,7 +79,7 @@ const VideoList = () => {
       accessorFn: (row) => row.video.createdAt,
       header: "Created At",
       cell: ({ cell }) => (
-        <div>{new Date(cell.getValue() as number).toLocaleDateString()}</div>
+        <div>{dayjs(cell.getValue() as number).fromNow()}</div>
       ),
     },
     {
