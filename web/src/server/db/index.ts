@@ -1,5 +1,5 @@
-import { createClient, type Client } from "@libsql/client"
-import { drizzle } from "drizzle-orm/libsql"
+import { drizzle } from "drizzle-orm/node-postgres"
+import { Pool } from "pg"
 
 import { env } from "@/env"
 import * as schema from "./schema"
@@ -9,11 +9,20 @@ import * as schema from "./schema"
  * update.
  */
 const globalForDb = globalThis as unknown as {
-  client: Client | undefined
+  client: Pool | undefined
 }
 
 export const client =
-  globalForDb.client ?? createClient({ url: env.DATABASE_URL })
+  globalForDb.client ??
+  new Pool({
+    host: process.env.PG_HOST,
+    port: parseInt(process.env.PG_PORT!),
+    user: process.env.PG_USER,
+    password: process.env.PG_PASSWORD,
+    database: process.env.PG_DATABASE,
+    ssl: false,
+  })
+
 if (env.NODE_ENV !== "production") globalForDb.client = client
 
 export const db = drizzle(client, { schema })

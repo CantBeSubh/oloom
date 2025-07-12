@@ -1,1 +1,0 @@
-CREATE UNIQUE INDEX `web_short_url_videoId_unique` ON `web_short_url` (`videoId`);
