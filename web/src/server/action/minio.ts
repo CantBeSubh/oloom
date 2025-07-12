@@ -67,7 +67,9 @@ export const getSignedUrl = async (videoId: string, expiresIn = 3600) => {
       expiresIn,
     )
 
-    const subtitleUrl = fileName.replace("video.mp4", "transcript.vtt")
+    const ObjectName = fileName.split("/")
+    ObjectName.pop()
+    const subtitleUrl = ObjectName.join("/") + "/transcript.vtt"
     let subtitlePresignedUrl = null
     try {
       const exists = await minioClient.statObject(bucketName, subtitleUrl)
@@ -98,7 +100,10 @@ export const getSignedUrl = async (videoId: string, expiresIn = 3600) => {
 export const removeFile = async (filename: string) => {
   try {
     const bucketName = "oloom"
-    await minioClient.removeObject(bucketName, filename)
+    const objectNameArr = filename.split("/")
+    objectNameArr.pop()
+    const objectName = objectNameArr.join("/")
+    await minioClient.removeObject(bucketName, objectName)
     return true
   } catch (error) {
     console.error(error)
