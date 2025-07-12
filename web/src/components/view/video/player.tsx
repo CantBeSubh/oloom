@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client"
-
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
@@ -8,6 +7,7 @@ import {
   MediaPlayer,
   MediaProvider,
   PlayButton,
+  Track,
   useMediaRemote,
   useMediaState,
   type MediaPlayerInstance,
@@ -21,6 +21,7 @@ import {
   Pause,
   Play,
   Redo,
+  SubtitlesIcon,
   Undo,
   Volume2,
   VolumeX,
@@ -33,6 +34,7 @@ interface VideoPlayerProps extends MediaPlayerProps {
   title?: string
   className?: string
   providerProps?: MediaProviderProps
+  subtitleUrl?: string
 }
 
 export function VideoPlayer({
@@ -41,6 +43,7 @@ export function VideoPlayer({
   title,
   className,
   providerProps,
+  subtitleUrl,
   ...props
 }: VideoPlayerProps) {
   const playerRef = React.useRef<MediaPlayerInstance>(null)
@@ -54,17 +57,27 @@ export function VideoPlayer({
     >
       <MediaPlayer
         ref={playerRef}
-        className="size-full"
+        // className="size-full"
         title={title}
         poster={poster}
+        src={src}
+        crossOrigin="anonymous"
         {...props}
       >
         <MediaProvider
+          className="z-[99999999]"
           {...providerProps}
-          onClick={(e) => e.stopPropagation()}
-          className="size-full [&_video]:absolute [&_video]:top-1/2 [&_video]:left-1/2 [&_video]:h-full [&_video]:-translate-x-1/2 [&_video]:-translate-y-1/2 [&_video]:object-cover"
+          // onClick={(e) => e.stopPropagation()}
+          // className="size-full [&_video]:absolute [&_video]:top-1/2 [&_video]:left-1/2 [&_video]:h-full [&_video]:-translate-x-1/2 [&_video]:-translate-y-1/2 [&_video]:object-cover"
         >
-          <source src={src} type="video/mp4" />
+          <Track
+            src={subtitleUrl}
+            kind="captions"
+            label="English (US)"
+            lang="en"
+            default
+            type="vtt"
+          />
         </MediaProvider>
         <VideoControls player={playerRef} />
       </MediaPlayer>
@@ -83,6 +96,9 @@ function VideoControls({
   const duration = useMediaState("duration", player)
   const currentTime = useMediaState("currentTime", player)
   const buffered = useMediaState("buffered", player)
+  const textTrack = useMediaState("textTrack", player)
+  const isTextTrackVisible = textTrack?.mode === "showing"
+  console.log(textTrack)
 
   const remote = useMediaRemote()
   const [isControlsVisible, setIsControlsVisible] = React.useState(true)
@@ -259,6 +275,22 @@ function VideoControls({
         </div>
 
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              remote.changeTextTrackMode(
+                0,
+                isTextTrackVisible ? "hidden" : "showing",
+              )
+            }
+            className={cn(
+              "text-white hover:bg-white/20",
+              isTextTrackVisible && "bg-white/30",
+            )}
+          >
+            <SubtitlesIcon className="h-5 w-5" />
+          </Button>
           <Button variant="secondary" onClick={cyclePlaybackSpeed}>
             <div className="flex items-center gap-1">
               <Gauge className="h-5 w-5" />

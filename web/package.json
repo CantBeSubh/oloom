@@ -36,6 +36,7 @@
     "dayjs": "^1.11.13",
     "drizzle-orm": "^0.41.0",
     "lucide-react": "^0.509.0",
+    "media-captions": "^0.0.18",
     "media-icons": "^1.1.5",
     "minio": "^8.0.5",
     "next": "^15.2.3",

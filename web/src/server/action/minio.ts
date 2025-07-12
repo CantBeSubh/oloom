@@ -67,7 +67,26 @@ export const getSignedUrl = async (videoId: string, expiresIn = 3600) => {
       expiresIn,
     )
 
-    return presignedUrl
+    const subtitleUrl = fileName.replace("video.mp4", "transcript.vtt")
+    let subtitlePresignedUrl = null
+    try {
+      const exists = await minioClient.statObject(bucketName, subtitleUrl)
+      if (exists) {
+        subtitlePresignedUrl = await minioClient.presignedGetObject(
+          bucketName,
+          subtitleUrl,
+          expiresIn,
+        )
+      }
+    } catch (error) {
+      // Object doesn't exist, leave subtitleContent as null
+      console.error(error)
+    }
+
+    return {
+      videoUrl: presignedUrl,
+      subtitleUrl: subtitlePresignedUrl,
+    }
   } catch (error) {
     console.error(error)
     throw new Error(

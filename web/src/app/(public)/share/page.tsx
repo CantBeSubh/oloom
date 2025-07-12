@@ -1,7 +1,6 @@
 "use client"
 
 import { Spinner } from "@/components/ui/spinner"
-import { VideoPlayer } from "@/components/view/video/player"
 import { getSignedUrl } from "@/server/action/minio"
 import { getVideo } from "@/server/action/video"
 import { useQuery } from "@tanstack/react-query"
@@ -22,7 +21,7 @@ const SharePage = () => {
   })
 
   const {
-    data: videoUrl,
+    data,
     error: urlError,
     isLoading: urlLoading,
   } = useQuery({
@@ -46,10 +45,24 @@ const SharePage = () => {
   return (
     <div className="h-[88vh] p-4">
       <div className="mb-4 flex items-center justify-center">
-        {videoUrl && (
-          <VideoPlayer src={videoUrl} autoPlay={false} controls={false}>
-            Your browser does not support the video tag.
-          </VideoPlayer>
+        {data?.videoUrl && (
+          // TODO: fix captions
+          // <VideoPlayer
+          //   src={data.videoUrl}
+          //   autoPlay={false}
+          //   controls={false}
+          //   subtitleUrl={data?.subtitleUrl ?? undefined}
+          // >
+          //   Your browser does not support the video tag.
+          // </VideoPlayer>
+          <video
+            controls
+            crossOrigin="anonymous"
+            className="aspect-video w-[75%] overflow-hidden rounded-lg"
+          >
+            <source src={data.videoUrl} type="video/mp4" />
+            <track kind="captions" src={data?.subtitleUrl ?? ""} srcLang="en" />
+          </video>
         )}
       </div>
       {video && (
