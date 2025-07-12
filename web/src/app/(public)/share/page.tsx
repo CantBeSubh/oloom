@@ -61,7 +61,9 @@ const SharePage = () => {
             className="aspect-video w-[75%] overflow-hidden rounded-lg"
           >
             <source src={data.videoUrl} type="video/mp4" />
-            <track kind="captions" src={data?.subtitleUrl ?? ""} srcLang="en" />
+            {data?.subtitleUrl && (
+              <track kind="captions" src={data?.subtitleUrl} srcLang="en" />
+            )}
           </video>
         )}
       </div>

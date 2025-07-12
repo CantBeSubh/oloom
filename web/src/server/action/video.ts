@@ -40,11 +40,9 @@ export const getVideos = async (limit = 10, offset = 0) => {
 
 export const getVideo = async (id: string) => {
   try {
-    const video = await db
-      .select()
-      .from(videoTable)
-      .where(eq(videoTable.id, id))
-      .get()
+    const video = (
+      await db.select().from(videoTable).where(eq(videoTable.id, id))
+    )[0]
 
     if (!video) {
       throw new Error("Video not found")

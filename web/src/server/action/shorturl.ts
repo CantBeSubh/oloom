@@ -24,11 +24,12 @@ export const createShortUrl = async (videoId: string) => {
 
 export const getShortUrl = async (shortVideoId: string) => {
   try {
-    const shortUrl = await db
-      .select()
-      .from(shortUrls)
-      .where(eq(shortUrls.shortVideoId, shortVideoId))
-      .get()
+    const shortUrl = (
+      await db
+        .select()
+        .from(shortUrls)
+        .where(eq(shortUrls.shortVideoId, shortVideoId))
+    )[0]
 
     if (!shortUrl) {
       throw new Error("Short url not found")
