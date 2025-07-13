@@ -1,3 +1,4 @@
+import os
 import shutil
 from dataclasses import asdict, dataclass, field
 from tempfile import mkdtemp
@@ -9,16 +10,17 @@ from ollama import Client
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-MINIO_IP = "192.168.0.118"
-MINIO_PORT = "9010"
-MINIO_ACCESS_KEY = "oloom_key"
-MINIO_SECRET_KEY = "KhGjEmfDW07wMN34SYKJkv539o7Rfq8yoGK0efeS"
-OLLAMA_URL = "https://ollama.homelab.subhranshu.com"
-PG_HOST = "192.168.0.102"
-PG_PORT = "5432"
-PG_USER = "postgres"
-PG_PASSWORD = "19293949"
-PG_DATABASE = "oloom"
+MINIO_URL = os.getenv("MINIO_URL")
+MINIO_PORT = os.getenv("MINIO_PORT")
+MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY")
+MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY")
+OLLAMA_URL = os.getenv("OLLAMA_URL")
+PG_HOST = os.getenv("PG_HOST")
+PG_PORT = os.getenv("PG_PORT")
+PG_USER = os.getenv("PG_USER")
+PG_PASSWORD = os.getenv("PG_PASSWORD")
+PG_DATABASE = os.getenv("PG_DATABASE")
+
 POSTGRES_URL = (
     f"postgresql+asyncpg://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}"
 )
@@ -72,10 +74,10 @@ class TempDirHandler:
 
 @dataclass
 class MinioHandler:
-    host: str = field(default=f"{MINIO_IP}:{MINIO_PORT}")
+    host: str = field(default=f"{MINIO_URL}:{MINIO_PORT}")
     access_key: str = field(default=MINIO_ACCESS_KEY)
     secret_key: str = field(default=MINIO_SECRET_KEY)
-    secure: bool = field(default=False)
+    secure: bool = field(default=True)
     minio_client: Minio = field(init=False)
 
     def __post_init__(self):
