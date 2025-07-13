@@ -1,0 +1,16 @@
+[project]
+name = "pipeline"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "asyncpg>=0.30.0",
+    "ffmpeg-python>=0.2.0",
+    "greenlet>=3.2.3",
+    "minio>=7.2.15",
+    "ollama>=0.5.1",
+    "openai-whisper>=20250625",
+    "psycopg2-binary>=2.9.10",
+    "sqlalchemy>=2.0.41",
+]
