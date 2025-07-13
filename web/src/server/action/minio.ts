@@ -1,9 +1,9 @@
 "use server"
 
+import { Client } from "@temporalio/client"
 import * as Minio from "minio"
 import { auth } from "../auth"
 import { createVideo, getVideo } from "./video"
-// import { env } from '@/env'
 
 const minioClient = new Minio.Client({
   endPoint: process.env.MINIO_IP!,
@@ -15,12 +15,12 @@ const minioClient = new Minio.Client({
 
 export const uploadFile = async (file: File) => {
   try {
+    const temporalClient = new Client()
     const session = await auth()
     if (!session) {
       throw new Error("Not authenticated")
     }
 
-    // TODO: generate subtitle (.srt) file
     const userId = session.user.id
     const uniqueFilename = `${userId}/${crypto.randomUUID()}/video.${file.type.split("/")[1]}`
 
@@ -30,8 +30,6 @@ export const uploadFile = async (file: File) => {
     await minioClient.putObject(bucketName, uniqueFilename, buffer, file.size, {
       "Content-Type": file.type,
     })
-
-    // Generate URL for the uploaded file
 
     const response = await createVideo({
       userId: session.user.id,
@@ -44,10 +42,19 @@ export const uploadFile = async (file: File) => {
       throw new Error("Failed to create video")
     }
 
+    await temporalClient.workflow.start("ProcessVideo", {
+      args: [{ video_id: response.data.id, file_name: response.data.filename }],
+      taskQueue: "video-task-queue",
+      workflowId: `video-task-${response.data.id}`,
+    })
+
     return `/share?vid=${response.data.id}`
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error uploading file:", error)
-    throw error
+    if (error instanceof Error) {
+      throw error
+    }
+    throw new Error("Unknown error occurred during file upload")
   }
 }
 

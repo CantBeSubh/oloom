@@ -30,6 +30,7 @@
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.81.5",
     "@tanstack/react-table": "^8.21.3",
+    "@temporalio/client": "^1.12.1",
     "@types/pg": "^8.15.4",
     "@vidstack/react": "^1.12.13",
     "class-variance-authority": "^0.7.1",
