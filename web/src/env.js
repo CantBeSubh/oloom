@@ -7,15 +7,21 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    AUTH_SECRET:
-      process.env.NODE_ENV === "production"
-        ? z.string()
-        : z.string().optional(),
+    AUTH_SECRET: z.string(),
     AUTH_GITHUB_ID: z.string(),
     AUTH_GITHUB_SECRET: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    MINIO_ACCESS_KEY: z.string(),
+    MINIO_SECRET_KEY: z.string(),
+    MINIO_URL: z.string(),
+    MINIO_PORT: z.string(),
+    PG_HOST: z.string(),
+    PG_PORT: z.string(),
+    PG_USER: z.string(),
+    PG_PASSWORD: z.string(),
+    PG_DATABASE: z.string(),
   },
 
   /**
@@ -36,6 +42,15 @@ export const env = createEnv({
     AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
     AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
     NODE_ENV: process.env.NODE_ENV,
+    MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
+    MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
+    MINIO_URL: process.env.MINIO_URL,
+    MINIO_PORT: process.env.MINIO_PORT,
+    PG_HOST: process.env.PG_HOST,
+    PG_PORT: process.env.PG_PORT,
+    PG_USER: process.env.PG_USER,
+    PG_PASSWORD: process.env.PG_PASSWORD,
+    PG_DATABASE: process.env.PG_DATABASE,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

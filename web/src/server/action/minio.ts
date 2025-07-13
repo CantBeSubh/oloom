@@ -1,16 +1,17 @@
 "use server"
 
+import { env } from "@/env"
 import { Client } from "@temporalio/client"
 import * as Minio from "minio"
 import { auth } from "../auth"
 import { createVideo, getVideo } from "./video"
 
 const minioClient = new Minio.Client({
-  endPoint: process.env.MINIO_IP!,
-  port: parseInt(process.env.MINIO_PORT!),
-  useSSL: false,
-  accessKey: process.env.MINIO_ACCESS_KEY,
-  secretKey: process.env.MINIO_SECRET_KEY,
+  endPoint: env.MINIO_URL,
+  port: parseInt(env.MINIO_PORT),
+  useSSL: true,
+  accessKey: env.MINIO_ACCESS_KEY,
+  secretKey: env.MINIO_SECRET_KEY,
 })
 
 export const uploadFile = async (file: File) => {
