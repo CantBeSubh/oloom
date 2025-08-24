@@ -3,6 +3,7 @@
 import { auth } from "@/server/auth"
 import { db } from "@/server/db"
 import { shortUrls, videos as videoTable } from "@/server/db/schema"
+import { desc } from "drizzle-orm"
 import { eq } from "drizzle-orm"
 import { removeFile } from "./minio"
 type Video = typeof videoTable.$inferInsert
@@ -30,6 +31,7 @@ export const getVideos = async (limit = 10, offset = 0) => {
       .limit(limit)
       .offset(offset)
       .leftJoin(shortUrls, () => eq(shortUrls.videoId, videoTable.id))
+      .orderBy(desc(videoTable.createdAt))
 
     return videos
   } catch (error) {

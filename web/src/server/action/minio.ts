@@ -16,7 +16,7 @@ const minioClient = new Minio.Client({
 
 export const uploadFile = async (file: File) => {
   try {
-    const temporalClient = new Client()
+    const temporalClient = new Client({ namespace: "oloom" })
     const session = await auth()
     if (!session) {
       throw new Error("Not authenticated")

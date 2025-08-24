@@ -7,7 +7,7 @@ from workflows import ProcessVideo
 
 
 async def main():
-    client = await Client.connect("localhost:7233", namespace="default")
+    client = await Client.connect("localhost:7233", namespace="oloom")
 
     activities = VideoProcessingActivities()
     worker = Worker(
