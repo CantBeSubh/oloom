@@ -106,6 +106,7 @@ export const getSignedUrl = async (videoId: string, expiresIn = 3600) => {
 }
 
 export const removeFile = async (filename: string) => {
+  // TODO: This is not working, fix it
   try {
     const bucketName = "oloom"
     const objectNameArr = filename.split("/")
