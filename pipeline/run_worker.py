@@ -1,13 +1,18 @@
 import asyncio
+import os
 
-from activities import VideoProcessingActivities
 from temporalio.client import Client
 from temporalio.worker import Worker
+
+from activities import VideoProcessingActivities
 from workflows import ProcessVideo
 
 
 async def main():
-    client = await Client.connect("localhost:7233", namespace="oloom")
+    client = await Client.connect(
+        os.getenv("TEMPORAL_URL"),
+        namespace="oloom"
+    )
 
     activities = VideoProcessingActivities()
     worker = Worker(

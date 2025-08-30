@@ -1,7 +1,7 @@
 "use server"
 
 import { env } from "@/env"
-import { Client } from "@temporalio/client"
+import { Client, Connection } from "@temporalio/client"
 import * as Minio from "minio"
 import { auth } from "../auth"
 import { createVideo, getVideo } from "./video"
@@ -16,7 +16,13 @@ const minioClient = new Minio.Client({
 
 export const uploadFile = async (file: File) => {
   try {
-    const temporalClient = new Client({ namespace: "oloom" })
+    const temporalConnection = await Connection.connect({
+      address: env.TEMPORAL_URL,
+    })
+    const temporalClient = new Client({
+      connection: temporalConnection,
+      namespace: "oloom",
+    })
     const session = await auth()
     if (!session) {
       throw new Error("Not authenticated")

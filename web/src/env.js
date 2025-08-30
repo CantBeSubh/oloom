@@ -22,6 +22,7 @@ export const env = createEnv({
     PG_USER: z.string(),
     PG_PASSWORD: z.string(),
     PG_DATABASE: z.string(),
+    TEMPORAL_URL: z.string(),
   },
 
   /**
@@ -51,6 +52,7 @@ export const env = createEnv({
     PG_USER: process.env.PG_USER,
     PG_PASSWORD: process.env.PG_PASSWORD,
     PG_DATABASE: process.env.PG_DATABASE,
+    TEMPORAL_URL: process.env.TEMPORAL_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
