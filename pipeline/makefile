@@ -27,5 +27,3 @@ dpush:
 	@echo "Pushing..."
 	docker push holyc0w/oloom-worker:${COMMIT_HASH}
 	docker push holyc0w/oloom-worker:latest
-
-.PHONY: shell dev
