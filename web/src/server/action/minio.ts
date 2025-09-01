@@ -9,7 +9,8 @@ import { createVideo, getVideo } from "./video"
 const minioClient = new Minio.Client({
   endPoint: env.MINIO_URL,
   port: parseInt(env.MINIO_PORT),
-  useSSL: true,
+  // TODO: Fix this
+  useSSL: false,
   accessKey: env.MINIO_ACCESS_KEY,
   secretKey: env.MINIO_SECRET_KEY,
 })
