@@ -1,11 +1,16 @@
 ## TODO
 
-- [ ] Add React Query
-- [ ] Add Toast
+- [x] Add React Query
+- [x] Add Toast
 - [ ] Customize Shadcn defaults
-- [ ] Update and delete video
+- [x] Update and delete video
 - [ ] Better video player
 - [ ] Fix DataTable
+- [ ] Delete video Minio (bugfix)
+- [ ] SSL Minio (bugfix)
+- [ ] Github Action for pushing images
+- [ ] Helm Charts for k8s cluster
+- [ ] DDNS setup for public access
 
 ## Imp commands
 
