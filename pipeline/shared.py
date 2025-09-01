@@ -5,10 +5,13 @@ from tempfile import mkdtemp
 from typing import Any, Dict, Optional
 
 import whisper
+from dotenv import load_dotenv
 from minio import Minio
 from ollama import Client
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
+
+load_dotenv()
 
 MINIO_URL = os.getenv("MINIO_URL")
 MINIO_PORT = os.getenv("MINIO_PORT")
@@ -77,7 +80,7 @@ class MinioHandler:
     host: str = field(default=f"{MINIO_URL}:{MINIO_PORT}")
     access_key: str = field(default=MINIO_ACCESS_KEY)
     secret_key: str = field(default=MINIO_SECRET_KEY)
-    secure: bool = field(default=True)
+    secure: bool = field(default=False)   #TODO: Fix this
     minio_client: Minio = field(init=False)
 
     def __post_init__(self):
@@ -115,7 +118,7 @@ class AIHandler:
     ollama_client: Client = field(init=False)
 
     def __post_init__(self):
-        self.model = whisper.load_model(self.model_name)
+        self.model = whisper.load_model(self.model_name,download_root=f"{os.getcwd()}/.cache/whisper")
         self.ollama_client = Client(host=self.ollama_host)
 
     def cleanup(self) -> None:
