@@ -1,12 +1,14 @@
 import asyncio
 import os
 
+from dotenv import load_dotenv
 from temporalio.client import Client
 from temporalio.worker import Worker
 
 from activities import VideoProcessingActivities
 from workflows import ProcessVideo
 
+load_dotenv()
 
 async def main():
     client = await Client.connect(
@@ -34,4 +36,6 @@ async def main():
 
 
 if __name__ == "__main__":
+    print(f"[!] CLIENT URL: {os.getenv("TEMPORAL_URL")}")
+    print("[+] WORKER STARTED")
     asyncio.run(main())

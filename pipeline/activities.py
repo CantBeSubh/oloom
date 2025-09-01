@@ -2,10 +2,11 @@ import asyncio
 import time
 
 import ffmpeg
-from shared import AIHandler, DBHandler, MinioHandler, TempDirHandler, VideoDetails
 from sqlalchemy import text
 from temporalio import activity
 from tqdm import tqdm
+
+from shared import AIHandler, DBHandler, MinioHandler, TempDirHandler, VideoDetails
 
 
 class VideoProcessingActivities:
