@@ -1,11 +1,10 @@
 FROM oven/bun:latest
-
+# TODO: Fix the certificate issue, opting for insecure http connection for minio
+# # Install CA certificates. You might need to adjust the path depending on your base image.
+# RUN apt-get update && apt-get install -y ca-certificates
 COPY . .
-
 RUN bun install
-
-
 EXPOSE 3000
-
 RUN bun run build
-RUN bun run start
+RUN rm .env
+CMD ["bun", "run", "start"]
