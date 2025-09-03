@@ -22,6 +22,11 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
+      {/*TODO: remove this once SSL is figured out on other services*/}
+      <meta
+        http-equiv="Content-Security-Policy"
+        content="upgrade-insecure-requests"
+      />
       <body>
         <Providers>
           <div className="flex min-h-screen flex-col">
