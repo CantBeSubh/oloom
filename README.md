@@ -8,7 +8,7 @@
 - [ ] Fix DataTable
 - [ ] Delete video Minio (bugfix)
 - [ ] SSL Minio (bugfix)
-- [ ] Github Action for pushing images
+- [x] Github Action for pushing images
 - [ ] Helm Charts for k8s cluster
 - [ ] DDNS setup for public access
 
