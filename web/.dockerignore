@@ -9,7 +9,7 @@ LICENSE
 .vscode
 Makefile
 helm-charts
-#.env TODO: ADd this back
+.env
 .editorconfig
 .idea
 coverage*
