@@ -38,4 +38,4 @@ jobs:
           context: ./pipeline
           platforms: linux/amd64
           push: true
-          tags: holyc0w/oloom-worker:latest, holyc0w/oloom-worker:${{ github.sha }}
+          tags: holyc0w/oloom-worker:${{ github.sha }}, holyc0w/oloom-worker:latest
